@@ -189,7 +189,7 @@
   function render(now){const dt=Math.min(32,now-last);last=now;time+=dt;updateBodies(dt);drawBackground();drawGalaxies();drawStars();bodies.forEach(drawBody);requestAnimationFrame(render)}
 
   function addBody(type,mass,x,y){const angle=Math.random()*Math.PI*2,speed=Math.max(.12,.42-Math.log10(Math.max(1,mass))*.025);const body={id:Date.now()+Math.random(),type,mass,x:Math.max(45,Math.min(w-panelWidth()-40,x)),y:Math.max(55,Math.min(h-55,y)),vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed};bodies.push(body);selectBody(body);document.getElementById('bodyCount').textContent=bodies.length;document.getElementById('heroCopy').classList.add('hidden');flash(`${types[type]?.label||'天体'}已进入视场 · 正在自动移动`)}
-  function selectBody(body){selectedBody=body;const actions=document.getElementById('selectionActions');actions.classList.toggle('show',!!body);if(body)document.getElementById('selectedName').textContent=`${types[body.type]?.label||'天体'} · ${formatMass(body.mass)}`}
+  function selectBody(body){selectedBody=body;window.currentLensBody=body?{type:body.type,mass:body.mass}:null;const actions=document.getElementById('selectionActions');actions.classList.toggle('show',!!body);if(body)document.getElementById('selectedName').textContent=`${types[body.type]?.label||'天体'} · ${formatMass(body.mass)}`}
   function removeSelected(){if(!selectedBody)return;const index=bodies.indexOf(selectedBody);if(index>=0)bodies.splice(index,1);selectBody(null);document.getElementById('bodyCount').textContent=bodies.length;flash('天体已移出观测视场')}
   function flash(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(flash.timer);flash.timer=setTimeout(()=>t.classList.remove('show'),1700)}
 
