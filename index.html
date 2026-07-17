@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#03050d" />
+  <title>引力之眼 · 星空观测实验室</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <canvas id="spaceCanvas" aria-label="可交互的引力透镜星空"></canvas>
+
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <div>
+          <p class="eyebrow">GRAVITY LAB / 01</p>
+          <h1>引力之眼</h1>
+        </div>
+      </div>
+      <button class="live-pill motion-toggle" id="motionToggle"><span></span><b id="motionText">动态运行中</b> · 点击暂停</button>
+    </header>
+
+    <section class="hero-copy" id="heroCopy">
+      <p class="kicker">SPACETIME OBSERVATORY</p>
+      <h2>看见质量<br><em>弯曲星光</em></h2>
+      <p class="intro">把右侧天体拖入星空。观察不同形态背景星系的放大、偏折、多重成像与爱因斯坦环。</p>
+      <div class="drag-hint"><span class="mouse-icon"></span> 拖拽任意天体开始实验</div>
+    </section>
+
+    <aside class="control-panel" id="controlPanel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">CELESTIAL OBJECTS</p>
+          <h3>天体质量库</h3>
+        </div>
+        <button id="collapseBtn" class="icon-btn" aria-label="收起面板">›</button>
+      </div>
+      <p class="panel-desc">拖入画面 · 质量采用太阳质量 M☉</p>
+
+      <div class="object-list" id="objectList">
+        <article class="object-card" draggable="true" data-type="sun" data-mass="1">
+          <div class="object-preview sun-preview"></div>
+          <div class="object-meta"><h4>恒星</h4><p>类太阳恒星</p></div>
+          <strong>1 M☉</strong>
+        </article>
+        <article class="object-card" draggable="true" data-type="giant" data-mass="20">
+          <div class="object-preview giant-preview"></div>
+          <div class="object-meta"><h4>蓝巨星</h4><p>高质量恒星</p></div>
+          <strong>20 M☉</strong>
+        </article>
+        <article class="object-card" draggable="true" data-type="neutron" data-mass="2.1">
+          <div class="object-preview neutron-preview"></div>
+          <div class="object-meta"><h4>中子星</h4><p>致密星体</p></div>
+          <strong>2.1 M☉</strong>
+        </article>
+        <article class="object-card featured" draggable="true" data-type="blackhole" data-mass="1000">
+          <div class="object-preview blackhole-preview"></div>
+          <div class="object-meta"><h4>恒星级黑洞</h4><p>强引力透镜</p></div>
+          <strong>10³ M☉</strong>
+        </article>
+        <article class="object-card featured" draggable="true" data-type="supermassive" data-mass="100000000">
+          <div class="object-preview supermassive-preview"></div>
+          <div class="object-meta"><h4>超大质量黑洞</h4><p>活动星系核</p></div>
+          <strong>10⁸ M☉</strong>
+        </article>
+      </div>
+
+      <div class="mass-control">
+        <div class="control-label"><span>自定义质量</span><output id="massOutput">10⁴ M☉</output></div>
+        <input id="massSlider" type="range" min="0" max="8" step="0.01" value="4" />
+        <div class="range-labels"><span>1 M☉</span><span>10⁸ M☉</span></div>
+        <button class="add-custom" id="addCustom"><span>＋</span> 放置自定义黑洞</button>
+      </div>
+
+      <div class="physics-note">
+        <span class="info-icon">i</span>
+        <p><b>爱因斯坦环</b><br>质量越大，时空曲率越强，背景星光偏折范围越广，环半径越大。</p>
+      </div>
+    </aside>
+
+    <section class="telemetry" id="telemetry">
+      <div><span>视场</span><b>4.2°</b></div>
+      <div><span>观测波段</span><b>可见光</b></div>
+      <div><span>透镜体</span><b id="bodyCount">0</b></div>
+    </section>
+
+    <section class="selection-actions" id="selectionActions" aria-live="polite">
+      <div><span>已选择透镜体</span><b id="selectedName">—</b></div>
+      <button id="deleteBody" title="也可以按 Delete 键">移出视场 <kbd>DEL</kbd></button>
+    </section>
+
+    <div class="toast" id="toast">将天体拖放到这里</div>
+    <div class="drag-ghost" id="dragGhost"></div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
