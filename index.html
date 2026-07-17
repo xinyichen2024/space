@@ -72,6 +72,7 @@
         <input id="massSlider" type="range" min="0" max="8" step="0.01" value="4" />
         <div class="range-labels"><span>1 M☉</span><span>10⁸ M☉</span></div>
         <button class="add-custom" id="addCustom"><span>＋</span> 放置自定义黑洞</button>
+        <button class="focus-entry" id="openFocus"><span>◎</span><span><b>焦距分析</b><small>FOCAL DISTANCE LAB</small></span><i>↗</i></button>
       </div>
 
       <div class="physics-note">
@@ -91,9 +92,46 @@
       <button id="deleteBody" title="也可以按 Delete 键">移出视场 <kbd>DEL</kbd></button>
     </section>
 
+    <section class="focus-lab" id="focusLab" aria-hidden="true">
+      <header class="focus-header">
+        <div class="focus-title"><span class="focus-orbit"></span><div><p>GRAVITATIONAL OPTICS / 02</p><h2>引力透镜 · 焦距分析</h2></div></div>
+        <div class="focus-header-meta"><span><i></i> 实时求解</span><button id="closeFocus" aria-label="关闭焦距分析">×</button></div>
+      </header>
+      <div class="focus-layout">
+        <aside class="focus-controls">
+          <div class="focus-section-head"><span>01</span><div><b>透镜体参数</b><small>LENS PROFILE</small></div></div>
+          <label class="focus-field"><span>质量 <output id="focusMassOut">1 M☉</output></span><input id="focusMass" type="range" min="0" max="8" step="0.01" value="0"><div><small>1 M☉</small><small>10⁸ M☉</small></div></label>
+          <label class="focus-select"><span>天体结构模型</span><select id="focusModel"><option value="star">主序恒星表面</option><option value="neutron">中子星表面</option><option value="blackhole">黑洞强透镜区</option></select></label>
+          <div class="focus-section-head"><span>02</span><div><b>观测几何</b><small>OBSERVATION GEOMETRY</small></div></div>
+          <label class="focus-field"><span>源星系距离 <output id="sourceOut">100 Mpc</output></span><input id="sourceDistance" type="range" min="-1" max="3" step="0.01" value="2"><div><small>0.1 Mpc</small><small>1000 Mpc</small></div></label>
+          <label class="focus-field"><span>观察者距离 <output id="observerOut">547 AU</output></span><input id="observerDistance" type="range" min="-1" max="14" step="0.01" value="2.738"><div><small>0.1 AU</small><small>10¹⁴ AU</small></div></label>
+          <label class="focus-field"><span>光轴偏差 <output id="alignmentOut">0.12 θE</output></span><input id="alignment" type="range" min="0" max="2" step="0.01" value="0.12"><div><small>完美对准</small><small>2 θE</small></div></label>
+          <button class="auto-focus" id="autoFocus"><span>⌖</span><b id="autoFocusLabel">移动到焦线起点</b></button>
+          <div class="model-note" id="modelNote">采用恒星半径—质量近似关系，计算掠过光球表面的最小焦距。</div>
+        </aside>
+
+        <section class="focus-visual">
+          <div class="visual-head"><div><p>EXTENDED SOURCE IMAGING</p><h3>目标星系 GLX–042 · 旋涡星系</h3></div><div class="quality-badge"><span id="qualityLabel">聚焦质量</span><b id="qualityOut">98%</b></div></div>
+          <canvas id="focusCanvas" aria-label="引力透镜焦距与星系成像分析图"></canvas>
+          <div class="focus-legend"><span><i class="source-dot"></i>源星系</span><span><i class="ray-line"></i>偏折光路</span><span><i class="plane-line"></i>观察面 / 焦线</span><span><i class="observer-dot"></i>观察者</span></div>
+          <div class="visual-caption"><span id="focusState">NEAR PERFECT FOCUS</span><p id="focusCaption">观察面接近最佳焦平面，旋臂被拉伸为清晰的切向弧。</p></div>
+        </section>
+
+        <aside class="focus-results">
+          <div class="focus-section-head"><span>03</span><div><b>求解结果</b><small>FOCAL SOLUTION</small></div></div>
+          <article class="result-primary"><span id="primaryMetricLabel">焦线起点</span><strong id="bestDistance">547 AU</strong><small id="distanceDelta">当前距离偏差 +0.0%</small></article>
+          <div class="result-grid"><article><span id="minFocusLabel">最小焦距</span><b id="minFocus">547 AU</b><small id="minFocusHint">掠射光线</small></article><article><span>爱因斯坦角半径</span><b id="einsteinAngle">2.85″</b><small>θE</small></article><article><span>物理环半径</span><b id="ringRadius">1.56 × 10⁶ km</b><small>RE</small></article><article><span>光线偏折角</span><b id="deflectionAngle">1.75″</b><small>α</small></article></div>
+          <div class="focus-curve"><div><span id="curveTitle">轴向响应</span><small id="curveSubtitle">FOCUS RESPONSE</small></div><canvas id="curveCanvas" width="280" height="96"></canvas></div>
+          <div class="equation-card"><span>薄透镜方程</span><p>β = θ − θ<sub>E</sub>² / θ</p><small>当 β → 0，扩展光源围绕透镜形成爱因斯坦环。</small></div>
+          <div class="accuracy-note"><i>i</i><p>恒星焦线采用弱场近似；中子星与黑洞只显示远场薄透镜尺度，近场需完整 GR 光线追迹。</p></div>
+        </aside>
+      </div>
+    </section>
+
     <div class="toast" id="toast">将天体拖放到这里</div>
     <div class="drag-ghost" id="dragGhost"></div>
   </main>
   <script src="app.js"></script>
+  <script src="focus.js"></script>
 </body>
 </html>
